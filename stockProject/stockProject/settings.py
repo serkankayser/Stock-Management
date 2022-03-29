@@ -39,8 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'stockApp',
     'crispy_forms',
+    'cities_light',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en', 'ro']
+CITIES_LIGHT_INCLUDE_COUNTRIES = ['RO']
+CITIES_LIGHT_INCLUDE_CITY_TYPES = ['PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLF', 'PPLG', 'PPLL', 'PPLR', 'PPLS', 'STLMT',]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

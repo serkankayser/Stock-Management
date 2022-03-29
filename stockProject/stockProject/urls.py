@@ -45,6 +45,11 @@ urlpatterns = [
     path('user-edit/<int:pk>', login_required(views.UserUpdate.as_view(), login_url='login'), name='editUser'),
     path('user-remove/<int:pk>', login_required(views.UserRemove.as_view(), login_url='login'), name='removeUser'),
 
+    #STORES
+    path('stores', login_required(views.StoreListView.as_view(), login_url='login')),
+    path('store-edit/<int:pk>', login_required(views.StoreUpdate.as_view(), login_url='login'), name='editStore'),
+    path('store-remove/<int:pk>', login_required(views.StoreRemove.as_view(), login_url='login'), name='removeStore'),
+    
     #CHARTS
     path('barchart', login_required(views.Barchart.as_view(), login_url='login')),    
 

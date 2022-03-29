@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Brand, Category
+from .models import Product, Brand, Category, Store
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['id', 'product_name']
@@ -38,3 +38,13 @@ class CategoryAdmin(admin.ModelAdmin):
         return Category.objects.all()
 
 admin.site.register(Category, CategoryAdmin)
+
+
+class StoreAdmin(admin.ModelAdmin):
+    list_display = ['store_name', 'city', 'is_activ']
+    fields = ('store_name', 'city', 'is_activ')
+
+    class Meta:
+        model = Store
+
+admin.site.register(Store, StoreAdmin)

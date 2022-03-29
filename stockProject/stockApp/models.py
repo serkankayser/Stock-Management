@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from mptt.models import MPTTModel, TreeForeignKey
+from cities_light.models import City, Region
 from decimal import Decimal
+
 
 class Brand(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -40,6 +42,7 @@ class Product(models.Model):
             self.sale_price = round(Decimal(self.price - self.price * self.discount_percentage / 100),2)
             return self.sale_price
 
+
 class Category(MPTTModel):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
@@ -63,3 +66,13 @@ class Category(MPTTModel):
             k = k.parent
 
         return ' -> '.join(full_path[::-1])
+
+
+class Store(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    store_name = models.CharField(max_length=255)
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    is_activ = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.store_name

@@ -7,8 +7,8 @@ from django.views.generic.base import RedirectView
 from django.contrib.auth import authenticate, login, logout as auth_logout, get_user_model
 from django.contrib.auth.views import LoginView
 from stockProject import settings
-from .models import Product, Brand, User
-from .forms import ProductForm, BrandForm
+from .models import Product, Brand, User, Store
+from .forms import ProductForm, BrandForm, StoreForm
 
 class AdminLogin(LoginView):
     template_name = 'login.html'
@@ -155,3 +155,47 @@ class UserRemove(PermissionRequiredMixin, DeleteView):
     model = User
     template_name = 'user_delete.html'
     success_url = '/users'
+
+
+# STORES
+class StoreListView(FormMixin, ListView):
+    
+    model = Store
+    template_name = 'store_detail.html'
+    form_class = StoreForm
+    initial = {'key': 'value'}
+    success_url = '/stores'
+
+    def get(self, request):
+        all_objects=Store.objects.all()
+        form = self.form_class(initial=self.initial)
+        context= {
+            'object_list': all_objects,
+            'form': form
+        }
+
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(self.success_url)
+
+        return render(request, self.template_name, {'form': form})
+
+
+class StoreUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = 'is_staff'
+    model = Store
+    template_name = 'store_edit.html'
+    fields= "__all__"
+    success_url = '/stores'
+
+
+class StoreRemove(PermissionRequiredMixin, DeleteView):
+    permission_required = 'is_staff'
+    model = Store
+    template_name = 'store_delete.html'
+    success_url = '/stores'
