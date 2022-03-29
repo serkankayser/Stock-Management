@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} <title>Brands</title> {% endblock %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+<div class="main-content-inner">
+    <div class="row">
+        <!-- data table start -->
+        <div class="col-12 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">All Brands</h4>
+                    <a id='contact-view' data-toggle="modal" data-target="#contactModal">
+                        <button type="button" class="btn btn-rounded btn-success mb-3">Add Brand</button>
+                    </a>
+
+                    <!-- ADD - The Modal START -->
+                    <div class="modal" id="contactModal">
+                        <form method="POST" id="contact-form" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Add A New Brand</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        {% for field in form %}
+                                        {{ field | as_crispy_field }}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-outline-success">Add Brand</button>
+                                        <button type="button" class="btn btn-outline-secondary"
+                                            data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- ADD - The Modal FINISH -->
+                    <div class="data-tables">
+                        <table id="dataTable" class="text-center">
+                            <thead class="bg-light text-capitalize">
+                                <tr>
+                                    <th>Brand Name</th>
+                                    <th>Action</th>
+                                    <th>Id</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for brand in object_list %}
+                                <tr>
+                                    <td>{{ brand.brand_name }}</td>
+                                    <td>
+                                        <a href="{% url 'editBrand' brand.id %}">
+                                            <button type="button" class="btn btn-rounded btn-info btn-sm">Edit
+                                                Brand</button>
+                                        </a>
+                                        <a href="{% url 'removeBrand' brand.id %}">
+                                            <button type="button" class="btn btn-rounded btn-danger btn-sm">Remove
+                                                Brand</button>
+                                        </a>
+                                    </td>
+                                    <td>{{ brand.id }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- data table end -->
+    </div>
+</div>
+
+{% endblock content %}
