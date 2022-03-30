@@ -4,3 +4,4 @@ srtdash-admin-dashboard
 db.sqlite3
 srtdash-admin-dashboard
 __init__.py
+StockEnv
