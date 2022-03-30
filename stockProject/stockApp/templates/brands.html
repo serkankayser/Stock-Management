@@ -15,7 +15,6 @@
                     <a id='contact-view' data-toggle="modal" data-target="#contactModal">
                         <button type="button" class="btn btn-rounded btn-success mb-3">Add Brand</button>
                     </a>
-
                     <!-- ADD - The Modal START -->
                     <div class="modal" id="contactModal">
                         <form method="POST" id="contact-form" enctype="multipart/form-data">
@@ -44,14 +43,15 @@
                         <table id="dataTable" class="text-center">
                             <thead class="bg-light text-capitalize">
                                 <tr>
-                                    <th>Brand Name</th>
-                                    <th>Action</th>
-                                    <th>Id</th>
+                                    <th class="all">Id</th>
+                                    <th class="all">Brand Name</th>
+                                    <th class="all">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for brand in object_list %}
                                 <tr>
+                                    <td>{{ brand.id }}</td>
                                     <td>{{ brand.brand_name }}</td>
                                     <td>
                                         <a href="{% url 'editBrand' brand.id %}">
@@ -63,7 +63,6 @@
                                                 Brand</button>
                                         </a>
                                     </td>
-                                    <td>{{ brand.id }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

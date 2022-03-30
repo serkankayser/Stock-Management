@@ -47,6 +47,7 @@
                                     <th>Product Name</th>
                                     <th>Price</th>
                                     <th>Qty</th>
+                                    <th>Store</th>
                                     <th>Category</th>
                                     <th>Brand</th>
                                     <th>Created At</th>
@@ -64,16 +65,17 @@
                                     <td>{{ product.product_name }}</td>
                                     <td>{{ product.price }} RON</td>
                                     <td>{{ product.quantity }}</td>
-                                    <td>{{ product.category }}</td>
+                                    <td>{{ product.store }}</td>
+                                    <td>{{ product.category.parent }}</td>
                                     <td>{{ product.brand }}</td>
                                     <td>{{ product.created_at | date:"d/m/Y" }} {{ product.created_at | time:"H:i:s" }}</td>
                                     <td>{{ product.updated_at | date:"d/m/Y" }} {{ product.updated_at | time:"H:i:s" }}</td>
                                     <td>
                                         <a href="{% url 'editProd' product.id %}">
-                                            <button type="button" class="btn btn-rounded btn-info btn-sm">Edit Product</button>
+                                            <button type="button" class="btn btn-rounded btn-info btn-sm btn-block">Edit Product</button>
                                         </a>
                                         <a href="{% url 'removeProd' product.id %}">
-                                            <button type="button" class="btn btn-rounded btn-danger btn-sm">Remove Product</button>
+                                            <button type="button" class="btn btn-rounded btn-danger btn-sm btn-block">Remove Product</button>
                                         </a>
                                     </td>
                                     <td>{{ product.description }}</td>

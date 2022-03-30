@@ -50,7 +50,7 @@ urlpatterns = [
     path('store-edit/<int:pk>', login_required(views.StoreUpdate.as_view(), login_url='login'), name='editStore'),
     path('store-remove/<int:pk>', login_required(views.StoreRemove.as_view(), login_url='login'), name='removeStore'),
     
-    #CHARTS
-    path('barchart', login_required(views.Barchart.as_view(), login_url='login')),    
+    #MAPS
+    path('maps', login_required(views.Maps.as_view(), login_url='login')),
 
 ]

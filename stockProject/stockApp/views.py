@@ -9,7 +9,10 @@ from django.contrib.auth.views import LoginView
 from stockProject import settings
 from .models import Product, Brand, User, Store
 from .forms import ProductForm, BrandForm, StoreForm
+from django.db.models import Sum, Count
 
+
+# LOGIN
 class AdminLogin(LoginView):
     template_name = 'login.html'
     def post(self, request):
@@ -30,6 +33,7 @@ class AdminLogin(LoginView):
         return render(request, "index.html")
 
 
+# LOGOUT
 class AdminLogout(RedirectView):
     url = settings.LOGOUT_REDIRECT_URL
     def get(self, request, *args, **kwargs):
@@ -37,15 +41,40 @@ class AdminLogout(RedirectView):
         return super(AdminLogout, self).get(request, *args, **kwargs)
 
 
+#RESETPASS(UNUSED)
 class ResetPass(LoginView):
     template_name = 'reset-pass.html'
 
 
-class Dashboard(TemplateView):
+#DASHBOARD
+class Dashboard(ListView):
     template_name = 'index.html'
     context_object_name = 'Dashboard'
 
+    def get(self, request):
+        products_by_category=(Product.objects
+            .values('category__parent__name')
+            .annotate(price_count=Sum('price'), prod_count=Count('id'))
+            .order_by()
+        )
 
+        products_by_brand=(Product.objects
+            .values('brand__brand_name')
+            .annotate(price_count=Sum('price'), brand_count=Count('id'))
+            .order_by()
+        )
+        for x in products_by_category:
+            print(x)
+        
+        context= {
+            'products_by_category': products_by_category,
+            'products_by_brand': products_by_brand,
+        }
+
+        return render(request, self.template_name, context)
+
+
+#PRODUCTS
 class Products(FormMixin, ListView):
     
     model = Product
@@ -88,10 +117,6 @@ class ProductRemove(DeleteView):
     model = Product
     success_url = '/products'
     template_name = 'product_delete.html'
-
-
-class Barchart(TemplateView):
-    template_name = 'barchart.html'
 
 
 # BRANDS
@@ -199,3 +224,9 @@ class StoreRemove(PermissionRequiredMixin, DeleteView):
     model = Store
     template_name = 'store_delete.html'
     success_url = '/stores'
+
+
+# MAPS
+class Maps(TemplateView):
+    template_name = 'maps.html'
+    context_object_name = 'Maps'

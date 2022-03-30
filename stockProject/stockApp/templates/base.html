@@ -67,61 +67,8 @@
                                 <li>
                                 <li><a href="/stores" aria-expanded="true">
                                         <i class="ti-home"></i><span>Stores</span></a></li>
-                                <li>
-                                    <a href="javascript:void(0)" aria-expanded="true"><i
-                                            class="ti-pie-chart"></i><span>Charts</span></a>
-                                    <ul class="collapse">
-                                        <li><a href="/barchart">bar chart</a></li>
-                                        <li><a href="linechart.html">line Chart</a></li>
-                                        <li><a href="piechart.html">pie chart</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="maps.html"><i class="ti-map-alt"></i> <span>maps</span></a></li>
+                                <li><a href="/maps"><i class="ti-map-alt"></i> <span>maps</span></a></li>
                                 <li><a href="invoice.html"><i class="ti-receipt"></i> <span>Invoice Summary</span></a></li>
-                                <li>
-                                    <a href="javascript:void(0)" aria-expanded="true"><i class="ti-layers-alt"></i>
-                                        <span>Pages</span></a>
-                                    <ul class="collapse">
-                                        <li><a href="login.html">Login</a></li>
-                                        <li><a href="login2.html">Login 2</a></li>
-                                        <li><a href="login3.html">Login 3</a></li>
-                                        <li><a href="register.html">Register</a></li>
-                                        <li><a href="register2.html">Register 2</a></li>
-                                        <li><a href="register3.html">Register 3</a></li>
-                                        <li><a href="register4.html">Register 4</a></li>
-                                        <li><a href="screenlock.html">Lock Screen</a></li>
-                                        <li><a href="screenlock2.html">Lock Screen 2</a></li>
-                                        <li><a href="reset-pass.html">reset password</a></li>
-                                        <li><a href="pricing.html">Pricing</a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" aria-expanded="true"><i
-                                            class="fa fa-exclamation-triangle"></i>
-                                        <span>Error</span></a>
-                                    <ul class="collapse">
-                                        <li><a href="404.html">Error 404</a></li>
-                                        <li><a href="403.html">Error 403</a></li>
-                                        <li><a href="500.html">Error 500</a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-align-left"></i>
-                                        <span>Multi
-                                            level menu</span></a>
-                                    <ul class="collapse">
-                                        <li><a href="#">Item level (1)</a></li>
-                                        <li><a href="#">Item level (1)</a></li>
-                                        <li><a href="#" aria-expanded="true">Item level (1)</a>
-                                            <ul class="collapse">
-                                                <li><a href="#">Item level (2)</a></li>
-                                                <li><a href="#">Item level (2)</a></li>
-                                                <li><a href="#">Item level (2)</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="#">Item level (1)</a></li>
-                                    </ul>
-                                </li>
                             </ul>
                         </nav>
                     </div>
@@ -555,10 +502,17 @@
 <!-- all line chart activation -->
 <script src="{% static 'js/line-chart.js' %}"></script>
 <!-- all bar chart activation -->
-<script src="{% static 'js/bar-chart.js' %}"></script>
+<!-- <script src="{% static 'js/bar-chart.js' %}"></script> -->
 <!-- all pie chart -->
 <script src="{% static 'js/pie-chart.js' %}"></script>
-
+<script src="https://www.amcharts.com/lib/3/pie.js"></script>
+<script src="https://www.amcharts.com/lib/3/ammap.js"></script>
+<script src="https://www.amcharts.com/lib/3/ammap_amcharts_extension.js"></script>
+<script src="https://www.amcharts.com/lib/3/maps/js/worldLow.js"></script>
+<script src="https://www.amcharts.com/lib/3/maps/js/continentsLow.js"></script>
+<!-- maps js -->
+<script src="{% static 'js/maps.js' %}"></script>
+{%block scripts%}{%endblock scripts%}
 </body>
 
 </html>

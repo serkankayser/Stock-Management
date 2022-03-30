@@ -15,23 +15,26 @@ class Brand(models.Model):
 
 class Product(models.Model):
 
-    id = models.BigAutoField(primary_key=True)                                  #The unique id to identify the product.
-    product_name = models.CharField(max_length=255)	                            #The product title to be displayed on the Inventory.
-    quantity = models.IntegerField(default=0)	 
+    id = models.BigAutoField(primary_key=True)
+    product_name = models.CharField(max_length=255)
+    quantity = models.IntegerField(default=0)
     category = models.ForeignKey(
         'Category',
-        related_name="products",
+        related_name="prod_category",
         on_delete=models.CASCADE)
-    
-    description = models.CharField(max_length=255, null=True, blank=True)	    #The column used to store the additional details of the product.
+    store = models.ForeignKey(
+        'Store',
+        related_name="prod_store",
+        on_delete=models.CASCADE)
+    description = models.CharField(max_length=255, null=True, blank=True)
     price = models.DecimalField(max_digits=18, decimal_places=2)
     is_discount = models.BooleanField(default=False)
     discount_percentage = models.DecimalField(max_digits=18, decimal_places=2, null=True, blank=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, default=0)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='CreatedBy')
     modified_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ModifiedBy')
-    created_at = models.DateTimeField(auto_now_add=True)	                    #It stores the date and time at which the product is created.
-    updated_at = models.DateTimeField(auto_now=True)	                        #It stores the date and time at which the product is updated.
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.product_name
