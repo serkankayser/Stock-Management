@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from mptt.models import MPTTModel, TreeForeignKey
 from cities_light.models import City, Region
 from decimal import Decimal
+from django.utils.text import slugify
 
 
 class Brand(models.Model):
@@ -57,8 +58,12 @@ class Category(MPTTModel):
         on_delete=models.CASCADE
     )
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
+
     class Meta:
-        unique_together = ('slug', 'parent',)    
+        unique_together = ('slug', 'parent',)
         verbose_name_plural = "categories"   
 
     def __str__(self):                           
@@ -79,3 +84,26 @@ class Store(models.Model):
 
     def __str__(self):
         return self.store_name
+
+
+class ProductAttribute(models.Model):
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(ProductAttribute, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class AttributeValues(models.Model):
+    name = models.CharField(max_length=200)
+    attribute = models.ForeignKey(ProductAttribute, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Attribute Values"
+
+    def __str__(self):
+        return self.name

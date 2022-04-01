@@ -14,7 +14,7 @@ class BrandForm(ModelForm):
 class CategoryForm(ModelForm):
     class Meta:
         model = Category
-        fields = ['name', 'slug', 'parent']
+        fields = ['name', 'parent']
 
 class StoreForm(ModelForm):
     class Meta:
