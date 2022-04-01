@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} <title>Category</title> {% endblock %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="login-area login-s1">
+    <div class="container">
+        <div class="login-box ptb--100">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="login-form-head">
+                    <h4>Edit Category</h4>
+                </div>
+                <div class="login-form-body">
+                    {% for field in form %}
+                    {{ field | as_crispy_field}}
+                    {% endfor %}
+                    <div class="submit-btn-area">
+                        <button id="form_submit" type="submit">Submit <i class="ti-arrow-right"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

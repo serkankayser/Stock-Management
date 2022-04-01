@@ -6,10 +6,10 @@ from django.views.generic.edit import FormView, FormMixin, UpdateView, DeleteVie
 from django.views.generic.base import RedirectView
 from django.contrib.auth import authenticate, login, logout as auth_logout, get_user_model
 from django.contrib.auth.views import LoginView
+from django.db.models import Sum, Count, F
 from stockProject import settings
-from .models import Product, Brand, User, Store
-from .forms import ProductForm, BrandForm, StoreForm
-from django.db.models import Sum, Count
+from .models import Product, Brand, User, Store, Category
+from .forms import ProductForm, BrandForm, StoreForm, CategoryForm
 
 
 # LOGIN
@@ -54,17 +54,15 @@ class Dashboard(ListView):
     def get(self, request):
         products_by_category=(Product.objects
             .values('category__parent__name')
-            .annotate(price_count=Sum('price'), prod_count=Count('id'))
+            .annotate(price_count=Sum(F('price') * F('quantity')), prod_count=Count('id'))
             .order_by()
         )
 
         products_by_brand=(Product.objects
             .values('brand__brand_name')
-            .annotate(price_count=Sum('price'), brand_count=Count('id'))
+            .annotate(price_count=Sum(F('price') * F('quantity')), brand_count=Count('id'))
             .order_by()
         )
-        for x in products_by_category:
-            print(x)
         
         context= {
             'products_by_category': products_by_category,
@@ -159,6 +157,48 @@ class BrandRemove(DeleteView):
     model = Brand
     template_name = 'brand_delete.html'
     success_url = '/brands'
+
+
+# CATEGORIES
+class Categories(FormMixin, ListView):
+    
+    model = Category
+    template_name = 'categories.html'
+    form_class = CategoryForm
+    initial = {'key': 'value'}
+    success_url = '/categories'
+
+    def get(self, request):
+        all_objects=Category.objects.all()
+        form = self.form_class(initial=self.initial)
+        context= {
+            'object_list': all_objects,
+            'form': form
+        }
+
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(self.success_url)
+
+        return render(request, self.template_name, {'form': form})
+
+
+class CategoryUpdate(UpdateView):
+    model = Category
+    template_name = 'category_edit.html'
+    fields= "__all__"
+    success_url = '/categories'
+
+
+class CategoryRemove(DeleteView):
+    model = Category
+    template_name = 'category_delete.html'
+    success_url = '/categories'
 
 
 # USERS

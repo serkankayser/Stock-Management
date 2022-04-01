@@ -39,7 +39,12 @@ urlpatterns = [
     path('brands', login_required(views.Brands.as_view(), login_url='login')),
     path('brand-edit/<int:pk>', login_required(views.BrandUpdate.as_view(), login_url='login'), name='editBrand'),
     path('brand-remove/<int:pk>', login_required(views.BrandRemove.as_view(), login_url='login'), name='removeBrand'),
-    
+
+    #CATEGORIES
+    path('categories', login_required(views.Categories.as_view(), login_url='login')),
+    path('category-edit/<int:pk>', login_required(views.CategoryUpdate.as_view(), login_url='login'), name='editCategory'),
+    path('category-remove/<int:pk>', login_required(views.CategoryRemove.as_view(), login_url='login'), name='removeCategory'),
+
     #USERS
     path('users', login_required(views.UserListView.as_view(), login_url='login')),
     path('user-edit/<int:pk>', login_required(views.UserUpdate.as_view(), login_url='login'), name='editUser'),

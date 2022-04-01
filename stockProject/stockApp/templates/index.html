@@ -204,7 +204,7 @@
             data: {
                 labels: [{%for data in products_by_brand %}'{{data.brand__brand_name}}',{% endfor %}],
     datasets: [{
-        label: "Total Price",
+        label: "Count",
         data: [{%for data in products_by_brand %}'{{ data.brand_count }}', {% endfor %}],
         backgroundColor: [
             '#8416fe',
@@ -279,7 +279,7 @@
                 <div class="single-report">
                     <div class="s-sale-inner pt--30">
                         <div class="s-report-title d-flex justify-content-between">
-                            <h4 class="header-title mb-0">Count of Product Prices By Category</h4>
+                            <h4 class="header-title mb-0">Count of Products By Category</h4>
                         </div>
                     </div>
                     <canvas id="prod2chart" height="150"></canvas>
@@ -299,7 +299,7 @@
                 <div class="single-report">
                     <div class="s-sale-inner pt--30">
                         <div class="s-report-title d-flex justify-content-between">
-                            <h4 class="header-title mb-0">Count of Product Prices By Brand</h4>
+                            <h4 class="header-title mb-0">Count of Products By Brand</h4>
                         </div>
                     </div>
                     <canvas id="prod4chart" height="150"></canvas>

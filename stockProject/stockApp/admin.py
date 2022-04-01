@@ -3,7 +3,7 @@ from .models import Product, Brand, Category, Store
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['id', 'product_name']
-    fields = ['id', 'product_name', 'quantity', 'category', 'description', 'price', 'brand', 'is_discount', 'discount_percentage', 'created_at', 'updated_at']
+    fields = ['id', 'product_name', 'quantity', 'category', 'store', 'description', 'price', 'brand', 'is_discount', 'discount_percentage', 'created_at', 'updated_at']
     readonly_fields = ('id','created_at', 'updated_at',)
 
     class Meta:

@@ -15,7 +15,7 @@ class Brand(models.Model):
 
 class Product(models.Model):
 
-    id = models.BigAutoField(primary_key=True)
+    id = models.BigAutoField(primary_key=True, null=False)
     product_name = models.CharField(max_length=255)
     quantity = models.IntegerField(default=0)
     category = models.ForeignKey(
