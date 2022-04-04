@@ -1,13 +1,22 @@
 from django.contrib import admin
-from .models import Product, Brand, Category, Store, ProductAttribute, AttributeValues
+from .models import Product, Brand, Category, Store, ProductColor, ProductSize
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'product_name']
-    fields = ['id', 'product_name', 'quantity', 'category', 'store', 'description', 'price', 'brand', 'is_discount', 'discount_percentage', 'created_at', 'updated_at']
-    readonly_fields = ('id','created_at', 'updated_at',)
+    list_display = ['id', 'product_name', 'quantity', 'category', 'store', 'description', 'price', 'brand', 'color', 'size', 'is_discount', 'discount_percentage', 'created_at', 'updated_at']
+    fields = ['id', 'product_name', 'quantity', 'category', 'store', 'description', 'price', 'brand', 'color', 'size', 'is_discount', 'discount_percentage', 'created_by', 'modified_by', 'created_at', 'updated_at']
+    readonly_fields = ('id','created_at', 'updated_at', 'created_by', 'modified_by')
 
     class Meta:
         model = Product
+
+    def save_model(self, request, obj, form, change):
+        instance = form.save(commit=False)
+        if not hasattr(instance, 'created_by'):
+            instance.created_by = request.user
+        instance.modified_by = request.user
+        instance.save()
+        form.save_m2m()
+        return instance
 
     def get_queryset(self, request):
         return Product.objects.all()
@@ -50,21 +59,21 @@ class StoreAdmin(admin.ModelAdmin):
 admin.site.register(Store, StoreAdmin)
 
 
-class ProductAttributeAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug']
-    fields = ('name',)
+class ProductColorAdmin(admin.ModelAdmin):
+    list_display = ['color', 'color_code']
+    fields = ('color', 'color_code')
 
     class Meta:
-        model = ProductAttribute
+        model = ProductColor
 
-admin.site.register(ProductAttribute, ProductAttributeAdmin)
+admin.site.register(ProductColor, ProductColorAdmin)
 
 
-class AttributeValuesAdmin(admin.ModelAdmin):
-    list_display = ['name', 'attribute']
-    fields = ('name', 'attribute')
+class ProductSizeAdmin(admin.ModelAdmin):
+    list_display = ['size']
+    fields = ('size',)
 
     class Meta:
-        model = AttributeValues
+        model = ProductSize
 
-admin.site.register(AttributeValues, AttributeValuesAdmin)
+admin.site.register(ProductSize, ProductSizeAdmin)

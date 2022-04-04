@@ -5,9 +5,7 @@ from cities_light.models import City, Region
 from decimal import Decimal
 from django.utils.text import slugify
 
-
 class Brand(models.Model):
-    id = models.BigAutoField(primary_key=True)
     brand_name = models.CharField(max_length=50)
 
     def __str__(self):
@@ -15,8 +13,6 @@ class Brand(models.Model):
 
 
 class Product(models.Model):
-
-    id = models.BigAutoField(primary_key=True, null=False)
     product_name = models.CharField(max_length=255)
     quantity = models.IntegerField(default=0)
     category = models.ForeignKey(
@@ -32,6 +28,8 @@ class Product(models.Model):
     is_discount = models.BooleanField(default=False)
     discount_percentage = models.DecimalField(max_digits=18, decimal_places=2, null=True, blank=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, default=0)
+    color = models.ForeignKey('ProductColor', on_delete=models.CASCADE, null=True, blank=True)
+    size = models.ForeignKey('ProductSize', on_delete=models.CASCADE, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='CreatedBy')
     modified_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ModifiedBy')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -77,7 +75,6 @@ class Category(MPTTModel):
 
 
 class Store(models.Model):
-    id = models.BigAutoField(primary_key=True)
     store_name = models.CharField(max_length=255)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     is_activ = models.BooleanField(default=True)
@@ -86,24 +83,16 @@ class Store(models.Model):
         return self.store_name
 
 
-class ProductAttribute(models.Model):
-    name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True)
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super(ProductAttribute, self).save(*args, **kwargs)
+class ProductSize(models.Model):
+    size=models.CharField(max_length=100)
 
     def __str__(self):
-        return self.name
+        return self.size
 
 
-class AttributeValues(models.Model):
-    name = models.CharField(max_length=200)
-    attribute = models.ForeignKey(ProductAttribute, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name_plural = "Attribute Values"
+class ProductColor(models.Model):
+    color=models.CharField(max_length=100)
+    color_code=models.CharField(max_length=100)
 
     def __str__(self):
-        return self.name
+        return self.color

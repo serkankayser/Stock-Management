@@ -53,10 +53,11 @@ class Dashboard(ListView):
 
     def get(self, request):
         products_by_category=(Product.objects
-            .values('category__parent__name')
+            .values('category__name')
             .annotate(price_count=Sum(F('price') * F('quantity')), prod_count=Count('id'))
             .order_by()
         )
+        print(products_by_category)
 
         products_by_brand=(Product.objects
             .values('brand__brand_name')

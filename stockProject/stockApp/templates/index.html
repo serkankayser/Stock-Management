@@ -11,7 +11,7 @@
             type: 'bar',
             // The data for our dataset
             data: {
-                labels: [{%for data in products_by_category %}'{{data.category__parent__name}}',{% endfor %}],
+                labels: [{%for data in products_by_category %}'{{data.category__name}}',{% endfor %}],
     datasets: [{
         label: "Total Price",
         data: [{%for data in products_by_category %}'{{ data.price_count }}', {% endfor %}],
@@ -75,7 +75,7 @@
             type: 'bar',
             // The data for our dataset
             data: {
-                labels: [{%for data in products_by_category %}'{{data.category__parent__name}}',{% endfor %}],
+                labels: [{%for data in products_by_category %}'{{data.category__name}}',{% endfor %}],
     datasets: [{
         label: "Count",
         data: [{%for data in products_by_category %}'{{ data.prod_count }}', {% endfor %}],

@@ -47,6 +47,10 @@
                                     <th class='all'>Id</th>
                                     <th class='all'>Store Name</th>
                                     <th class='all'>City</th>
+                                    <th class='all'>Region</th>
+                                    <th class='all'>Country</th>
+                                    <th class='all'>Latitude</th>
+                                    <th class='all'>Longitude</th>
                                     <th class='all'>Activ</th>
                                     <th class='all'>Action</th>
                                 </tr>
@@ -56,7 +60,11 @@
                                 <tr>
                                     <td>{{ store.id }}</td>
                                     <td>{{ store.store_name }}</td>
-                                    <td>{{ store.city }}</td>
+                                    <td>{{ store.city.name }}</td>
+                                    <td>{{ store.city.region }}</td>
+                                    <td>{{ store.city.country }}</td>
+                                    <td>{{ store.city.latitude }}</td>
+                                    <td>{{ store.city.longitude }}</td>
                                     <td>{{ store.is_activ }}</td>
                                     <td>
                                         <a href="{% url 'editStore' store.id %}">

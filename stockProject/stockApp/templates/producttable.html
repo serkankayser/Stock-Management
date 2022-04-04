@@ -53,6 +53,8 @@
                                     <th>Created At</th>
                                     <th>Updated At</th>
                                     <th>Action</th>
+                                    <th class="none">Color</th>
+                                    <th class="none">Size</th>
                                     <th class="none">Description</th>
                                     <th class="none">Created By</th>
                                     <th class="none">Modified By</th>
@@ -66,7 +68,11 @@
                                     <td>{{ product.price }} RON</td>
                                     <td>{{ product.quantity }}</td>
                                     <td>{{ product.store }}</td>
-                                    <td>{{ product.category.parent }}</td>
+                                    {% if product.category.parent %}
+                                        <td>{{ product.category.parent }}</td>
+                                    {% else %}
+                                        <td>{{ product.category }}</td>
+                                    {% endif %}
                                     <td>{{ product.brand }}</td>
                                     <td>{{ product.created_at | date:"d/m/Y" }} {{ product.created_at | time:"H:i:s" }}</td>
                                     <td>{{ product.updated_at | date:"d/m/Y" }} {{ product.updated_at | time:"H:i:s" }}</td>
@@ -78,6 +84,16 @@
                                             <button type="button" class="btn btn-rounded btn-danger btn-sm btn-block">Remove Product</button>
                                         </a>
                                     </td>
+                                    {% if product.color %}
+                                        <td>{{ product.color }}</td>
+                                    {% else %}
+                                        <td>-</td>
+                                    {% endif %}
+                                    {% if product.size %}
+                                        <td>{{ product.size }}</td>
+                                    {% else %}
+                                        <td>-</td>
+                                    {% endif %}
                                     <td>{{ product.description }}</td>
                                     <td>{{ product.created_by }}</td>
                                     <td>{{ product.modified_by }}</td>
