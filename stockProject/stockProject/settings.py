@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'stockApp',
     'crispy_forms',
     'cities_light',
+    'auditlog',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en', 'ro']
@@ -60,6 +61,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'auditlog.middleware.AuditlogMiddleware',
+    'stockApp.middleware.AutoCreatedAndModifiedFields',
 ]
 
 ROOT_URLCONF = 'stockProject.urls'

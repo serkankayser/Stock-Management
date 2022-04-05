@@ -4,6 +4,8 @@ from mptt.models import MPTTModel, TreeForeignKey
 from cities_light.models import City, Region
 from decimal import Decimal
 from django.utils.text import slugify
+from auditlog.registry import auditlog
+
 
 class Brand(models.Model):
     brand_name = models.CharField(max_length=50)
@@ -11,6 +13,7 @@ class Brand(models.Model):
     def __str__(self):
         return self.brand_name
 
+exclude = ['created_by', 'modified_by']
 
 class Product(models.Model):
     product_name = models.CharField(max_length=255)
@@ -30,8 +33,8 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, default=0)
     color = models.ForeignKey('ProductColor', on_delete=models.CASCADE, null=True, blank=True)
     size = models.ForeignKey('ProductSize', on_delete=models.CASCADE, null=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='CreatedBy')
-    modified_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ModifiedBy')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_%(class)s_set', null=False, blank=True)
+    modified_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='modified_%(class)s_set', null=False, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -96,3 +99,6 @@ class ProductColor(models.Model):
 
     def __str__(self):
         return self.color
+
+
+auditlog.register(Product)

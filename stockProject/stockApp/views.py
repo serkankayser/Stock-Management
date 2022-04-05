@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import TemplateView, ListView
-from django.views.generic.edit import FormView, FormMixin, UpdateView, DeleteView
+from django.views.generic.edit import FormView, FormMixin, UpdateView, DeleteView, CreateView
 from django.views.generic.base import RedirectView
 from django.contrib.auth import authenticate, login, logout as auth_logout, get_user_model
 from django.contrib.auth.views import LoginView, PasswordResetView
@@ -89,7 +89,7 @@ class Dashboard(ListView):
 
 
 #PRODUCTS
-class Products(FormMixin, ListView):
+class Products(CreateView, ListView):
     
     model = Product
     template_name = 'producttable.html'
@@ -97,35 +97,33 @@ class Products(FormMixin, ListView):
     initial = {'key': 'value'}
     success_url = '/products'
 
-    def get(self, request):
-        all_objects=Product.objects.all()
-        form = self.form_class(initial=self.initial)
-        for x in all_objects:
-            if x.is_discount:
-                x.price=x.discount
-        context= {
-            'object_list': all_objects,
-            'form': form
-        }
+    # def get(self, request):
+    #     all_objects=Product.objects.all()
+    #     form = self.form_class(initial=self.initial)
+    #     for x in all_objects:
+    #         if x.is_discount:
+    #             x.price=x.discount
+    #     context= {
+    #         'object_list': all_objects,
+    #         'form': form
+    #     }
 
-        return render(request, self.template_name, context)
+    #     return render(request, self.template_name, context)
 
-    def post(self, request):
-        form = self.form_class(request.POST)
+    # def post(self, request):
+    #     form = self.form_class(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         return HttpResponseRedirect(self.success_url)
 
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(self.success_url)
-
-        return render(request, self.template_name, {'form': form})
+        # return render(request, self.template_name, {'form': form})
 
 
 class ProductUpdate(UpdateView):
     model = Product
     template_name = 'product_edit.html'
-    fields= "__all__"
+    form_class = ProductForm
     success_url = '/products'
-
 
 class ProductRemove(DeleteView):
     model = Product

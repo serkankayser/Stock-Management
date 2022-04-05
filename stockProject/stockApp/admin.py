@@ -2,21 +2,21 @@ from django.contrib import admin
 from .models import Product, Brand, Category, Store, ProductColor, ProductSize
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'product_name', 'quantity', 'category', 'store', 'description', 'price', 'brand', 'color', 'size', 'is_discount', 'discount_percentage', 'created_at', 'updated_at']
+    list_display = ['id', 'product_name', 'quantity', 'category', 'store', 'description', 'price', 'brand', 'color', 'size', 'is_discount', 'discount_percentage', 'created_by', 'modified_by', 'created_at', 'updated_at']
     fields = ['id', 'product_name', 'quantity', 'category', 'store', 'description', 'price', 'brand', 'color', 'size', 'is_discount', 'discount_percentage', 'created_by', 'modified_by', 'created_at', 'updated_at']
     readonly_fields = ('id','created_at', 'updated_at', 'created_by', 'modified_by')
 
     class Meta:
         model = Product
 
-    def save_model(self, request, obj, form, change):
-        instance = form.save(commit=False)
-        if not hasattr(instance, 'created_by'):
-            instance.created_by = request.user
-        instance.modified_by = request.user
-        instance.save()
-        form.save_m2m()
-        return instance
+    # def save_model(self, request, obj, form, change):
+    #     instance = form.save(commit=False)
+    #     if not hasattr(instance, 'created_by'):
+    #         instance.created_by = request.user
+    #     instance.modified_by = request.user
+    #     instance.save()
+    #     form.save_m2m()
+    #     return instance
 
     def get_queryset(self, request):
         return Product.objects.all()
