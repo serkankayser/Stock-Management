@@ -19,6 +19,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from stockApp import views
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,9 +27,12 @@ urlpatterns = [
     #DASHBOARD
     path('', login_required(views.Dashboard.as_view(), login_url='login')),
     
-    #LOGIN & LOGOUT
+    #LOGIN & LOGOUT & RESET_PASS
     path('login', views.AdminLogin.as_view(), name='login'),
     path('logout', views.AdminLogout.as_view()),
+    path('resetpass', views.ResetPass.as_view()),
+    path('password-reset-confirm/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'), name='password_reset_confirm'),
+    path('password-reset-complete', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     
     #PRODUCTS
     path('products', login_required(views.Products.as_view(), login_url='login')),

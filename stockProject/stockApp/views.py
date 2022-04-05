@@ -5,12 +5,15 @@ from django.views.generic import TemplateView, ListView
 from django.views.generic.edit import FormView, FormMixin, UpdateView, DeleteView
 from django.views.generic.base import RedirectView
 from django.contrib.auth import authenticate, login, logout as auth_logout, get_user_model
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordResetView
 from django.db.models import Sum, Count, F
 from stockProject import settings
 from .models import Product, Brand, User, Store, Category
 from .forms import ProductForm, BrandForm, StoreForm, CategoryForm
-
+from django.urls import reverse_lazy
+from django.contrib.messages.views import SuccessMessageMixin
+from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 
 # LOGIN
 class AdminLogin(LoginView):
@@ -19,7 +22,6 @@ class AdminLogin(LoginView):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
-        print(user)
         if user is not None:
             if user.is_active:
                 login(request, user)
@@ -41,23 +43,36 @@ class AdminLogout(RedirectView):
         return super(AdminLogout, self).get(request, *args, **kwargs)
 
 
-#RESETPASS(UNUSED)
-class ResetPass(LoginView):
+#RESETPASS
+class ResetPass(SuccessMessageMixin, PasswordResetView):
     template_name = 'reset-pass.html'
-
+    html_email_template_name = 'password_reset_email.html'
+    subject_template_name = 'password_reset_subject.txt'
+    success_message = "We've emailed you instructions for setting your password, " \
+                      "if an account exists with the email you entered. You should receive them shortly." \
+                      " If you don't receive an email, " \
+                      "please make sure you've entered the address you registered with, and check your spam folder."
+    from_email='accounts@inspirationsoft.com'
+    success_url = '/login'
+    
+    # mail = EmailMultiAlternatives(
+    #     subject="Your Subject",
+    #     body=email_template_name,
+    #     from_email="Inspiration Soft <contact@inspirationsoft.com>",
+    #     to=["serkankayser@windowslive.com"],
+    #     headers={"Reply-To": "support@sendgrid.com"}
+    #     )
 
 #DASHBOARD
 class Dashboard(ListView):
     template_name = 'index.html'
     context_object_name = 'Dashboard'
-
     def get(self, request):
         products_by_category=(Product.objects
             .values('category__name')
             .annotate(price_count=Sum(F('price') * F('quantity')), prod_count=Count('id'))
             .order_by()
         )
-        print(products_by_category)
 
         products_by_brand=(Product.objects
             .values('brand__brand_name')
@@ -162,7 +177,6 @@ class BrandRemove(DeleteView):
 
 # CATEGORIES
 class Categories(FormMixin, ListView):
-    
     model = Category
     template_name = 'categories.html'
     form_class = CategoryForm
@@ -225,7 +239,6 @@ class UserRemove(PermissionRequiredMixin, DeleteView):
 
 # STORES
 class StoreListView(FormMixin, ListView):
-    
     model = Store
     template_name = 'store_detail.html'
     form_class = StoreForm
