@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout as auth_logout, get_
 from django.contrib.auth.views import LoginView, PasswordResetView
 from django.db.models import Sum, Count, F
 from stockProject import settings
-from .models import Product, Brand, User, Store, Category
+from .models import Product, Brand, User, Store, Category, LogEntry
 from .forms import ProductForm, BrandForm, StoreForm, CategoryForm
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
@@ -276,6 +276,20 @@ class StoreRemove(PermissionRequiredMixin, DeleteView):
     model = Store
     template_name = 'store_delete.html'
     success_url = '/stores'
+
+# LOGS
+class AuditLogs(ListView):
+    model = LogEntry
+    template_name = 'audit_logs.html'
+
+    def get(self, request):
+        all_objects=LogEntry.objects.all()
+
+        context= {
+            'object_list': all_objects,
+        }
+
+        return render(request, self.template_name, context)
 
 
 # MAPS

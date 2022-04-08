@@ -62,4 +62,7 @@ urlpatterns = [
     #MAPS
     path('maps', login_required(views.Maps.as_view(), login_url='login')),
 
+    #LOGS
+    path('logs', login_required(views.AuditLogs.as_view(), login_url='login')),
+
 ]

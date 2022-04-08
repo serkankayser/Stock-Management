@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} <title>Logs</title> {% endblock %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+<div class="main-content-inner">
+    <div class="row">
+        <!-- data table start -->
+        <div class="col-12 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">All Logs</h4>
+                    <div class="data-tables">
+                        <table id="dataTable" class="text-center">
+                            <thead class="bg-light text-capitalize">
+                                <tr>
+                                    <th class="all">Created</th>
+                                    <th class="all">Resource</th>
+                                    <th class="all">Action</th>
+                                    <th class="all">Change - Before</th>
+                                    <th class="all">Change - After</th>
+                                    <th class="all">User</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for log in object_list %}
+                                <tr>
+                                    <td>{{ log.timestamp }}</td>
+                                    <td>{{ log.content_type }} - {{ log.object_repr }}</td>
+                                    <td>{{ log.get_action_display }}</td>
+                                    <td>{% for key, value in log.changes_dict.items %}
+                                        <b>{{ key }}:</b> {{ value.0|default:"None" }}<br>
+                                        {% endfor %}</td>
+                                    <td>{% for key, value in log.changes_dict.items %}
+                                        <b>{{ key }}:</b> {{ value.1|default:"None" }}<br>
+                                        {% endfor %}</td>
+                                    <td>{{ log.actor }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- data table end -->
+    </div>
+</div>
+{% endblock content %}

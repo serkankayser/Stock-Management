@@ -5,7 +5,7 @@ from cities_light.models import City, Region
 from decimal import Decimal
 from django.utils.text import slugify
 from auditlog.registry import auditlog
-
+from auditlog.models import LogEntry
 
 class Brand(models.Model):
     brand_name = models.CharField(max_length=50)
@@ -100,5 +100,10 @@ class ProductColor(models.Model):
     def __str__(self):
         return self.color
 
-
 auditlog.register(Product)
+auditlog.register(User)
+auditlog.register(Brand)
+auditlog.register(Category)
+auditlog.register(Store)
+auditlog.register(ProductSize)
+auditlog.register(ProductColor)
