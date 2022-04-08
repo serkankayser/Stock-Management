@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'cities_light',
     'auditlog',
+    'phonenumber_field',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['en', 'ro']

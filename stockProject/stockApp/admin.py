@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Brand, Category, Store, ProductColor, ProductSize
+from .models import Product, Brand, Category, Store, ProductColor, ProductSize, Orders, Company
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['id', 'product_name', 'quantity', 'category', 'store', 'description', 'price', 'brand', 'color', 'size', 'is_discount', 'discount_percentage', 'created_by', 'modified_by', 'created_at', 'updated_at']
@@ -8,15 +8,6 @@ class ProductAdmin(admin.ModelAdmin):
 
     class Meta:
         model = Product
-
-    # def save_model(self, request, obj, form, change):
-    #     instance = form.save(commit=False)
-    #     if not hasattr(instance, 'created_by'):
-    #         instance.created_by = request.user
-    #     instance.modified_by = request.user
-    #     instance.save()
-    #     form.save_m2m()
-    #     return instance
 
     def get_queryset(self, request):
         return Product.objects.all()
@@ -77,3 +68,62 @@ class ProductSizeAdmin(admin.ModelAdmin):
         model = ProductSize
 
 admin.site.register(ProductSize, ProductSizeAdmin)
+
+
+class OrdersAdmin(admin.ModelAdmin):
+    list_display = [
+        'user'
+        ,'product'
+        ,'status'
+        ,'vat'
+        ,'discount'
+        ,'company'
+        ,'shipping'
+        ,'gross_amount'
+        ,'net_amount'
+        ,'info_order'
+        ,'created_at'
+        ,'updated_at'
+    ]
+    fields = (
+        'user'
+        ,'product'
+        ,'status'
+        ,'vat'
+        ,'discount'
+        ,'company'
+        ,'shipping'
+        ,'gross_amount'
+        ,'net_amount'
+        ,'info_order'
+        ,'created_at'
+        ,'updated_at'
+    )
+    readonly_fields = ('created_at', 'updated_at')
+    class Meta:
+        model = Orders
+
+admin.site.register(Orders, OrdersAdmin)
+
+
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = [
+        'name'
+        ,'country'
+        ,'city'
+        ,'address'
+        ,'phone'
+    ]
+    
+    fields = (
+        'name'
+        ,'country'
+        ,'city'
+        ,'address'
+        ,'phone'
+    )
+
+    class Meta:
+        model = Company
+
+admin.site.register(Company, CompanyAdmin)

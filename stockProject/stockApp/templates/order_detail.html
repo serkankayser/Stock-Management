@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} <title>Orders</title> {% endblock %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+<div class="main-content-inner">
+    <div class="row">
+        <!-- data table start -->
+        <div class="col-12 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">All Orders</h4>
+                    <a id='contact-view' data-toggle="modal" data-target="#contactModal">
+                        <button type="button" class="btn btn-rounded btn-success mb-3">Add Store</button>
+                    </a>
+
+                    <!-- ADD - The Modal START -->
+                    <div class="modal" id="contactModal">
+                        <form method="POST" id="contact-form" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Add A New Order</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        {% for field in form %}
+                                        {{ field | as_crispy_field }}
+                                        {% endfor %}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-outline-success">Add Order</button>
+                                        <button type="button" class="btn btn-outline-secondary"
+                                            data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- ADD - The Modal FINISH -->
+                    <div class="data-tables">
+                        <table id="dataTable" class="text-center">
+                            <thead class="bg-light text-capitalize">
+                                <tr>
+                                    <th class='all'>User</th>
+                                    <th class='all'>Product</th>
+                                    <th class='all'>Status</th>
+                                    <th class='all'>Vat</th>
+                                    <th class='all'>Discount</th>
+                                    <th class='all'>Company</th>
+                                    <th class='all'>Shipping</th>
+                                    <th class='all'>Gross Amount</th>
+                                    <th class='all'>Net Amount</th>
+                                    <th class='all'>Info Order</th>
+                                    <th class='all'>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in object_list %}
+                                <tr>
+                                    <td>{{ order.user }}</td>
+                                    <td>{{ order.product }}</td>
+                                    <td>{{ order.status }}</td>
+                                    <td>{{ order.vat }}</td>
+                                    <td>{{ order.discount }}</td>
+                                    <td>{{ order.company }}</td>
+                                    <td>{{ order.shipping }}</td>
+                                    <td>{{ order.gross_amount }}</td>
+                                    <td>{{ order.net_amount }}</td>
+                                    <td>{{ order.info_order }}</td>
+                                    <td>
+                                        <a href="{% url 'editOrder' order.id %}">
+                                            <button type="button" class="btn btn-rounded btn-info btn-sm">Edit
+                                                Order</button>
+                                        </a>
+                                        <a href="{% url 'removeOrder' order.id %}">
+                                            <button type="button" class="btn btn-rounded btn-danger btn-sm">Remove
+                                                Order</button>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- data table end -->
+    </div>
+</div>
+
+{% endblock content %}

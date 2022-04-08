@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from mptt.models import MPTTModel, TreeForeignKey
-from cities_light.models import City, Region
+from cities_light.models import City, Region, Country
 from decimal import Decimal
 from django.utils.text import slugify
 from auditlog.registry import auditlog
 from auditlog.models import LogEntry
+from phonenumber_field.modelfields import PhoneNumberField
+
 
 class Brand(models.Model):
     brand_name = models.CharField(max_length=50)
@@ -87,18 +89,64 @@ class Store(models.Model):
 
 
 class ProductSize(models.Model):
-    size=models.CharField(max_length=100)
+    size = models.CharField(max_length=100)
 
     def __str__(self):
         return self.size
 
 
 class ProductColor(models.Model):
-    color=models.CharField(max_length=100)
-    color_code=models.CharField(max_length=100)
+    color = models.CharField(max_length=100)
+    color_code = models.CharField(max_length=100)
 
     def __str__(self):
         return self.color
+
+
+class Orders(models.Model):
+    STATUS_CHOICES=(
+        ("PENDING", "Pending"),
+        ("PAID", "Paid"),
+        ("FAILED", "Failed"),
+        ("SHIPPED", "Shipped"),
+        ("DELIVERED", "Delivered"),
+        ("RETURNED", "Returned"),
+        ("COMPLETED", "Completed"),
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="PENDING")
+    vat = models.DecimalField(max_digits=18, decimal_places=2, default=19)
+    discount = models.DecimalField(max_digits=18, decimal_places=2, default=0)
+    company = models.ForeignKey('Company', on_delete=models.CASCADE)
+    shipping = models.DecimalField(max_digits=18, decimal_places=2)
+    gross_amount = models.DecimalField(max_digits=18, decimal_places=2)
+    net_amount = models.DecimalField(max_digits=18, decimal_places=2)
+    info_order = models.TextField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Order"
+        verbose_name_plural = "Orders"
+
+    def __str__(self):
+        return str(self.product)
+
+
+class Company(models.Model):
+    name = models.CharField(max_length=255, default='Inspirationsoft SRL')
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    address = models.CharField(max_length=255)
+    phone = PhoneNumberField(null=False, blank=False, unique=True)
+
+    class Meta:
+        verbose_name = "Company"
+        verbose_name_plural = "Companies"
+
+    def __str__(self):
+        return self.name
 
 auditlog.register(Product)
 auditlog.register(User)
@@ -107,3 +155,5 @@ auditlog.register(Category)
 auditlog.register(Store)
 auditlog.register(ProductSize)
 auditlog.register(ProductColor)
+auditlog.register(Orders)
+auditlog.register(Company)

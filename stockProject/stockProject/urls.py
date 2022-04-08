@@ -58,7 +58,12 @@ urlpatterns = [
     path('stores', login_required(views.StoreListView.as_view(), login_url='login')),
     path('store-edit/<int:pk>', login_required(views.StoreUpdate.as_view(), login_url='login'), name='editStore'),
     path('store-remove/<int:pk>', login_required(views.StoreRemove.as_view(), login_url='login'), name='removeStore'),
-    
+
+    #ORDERS
+    path('orders', login_required(views.OrderListView.as_view(), login_url='login')),
+    path('order-edit/<int:pk>', login_required(views.OrderUpdate.as_view(), login_url='login'), name='editOrder'),
+    path('order-remove/<int:pk>', login_required(views.OrderRemove.as_view(), login_url='login'), name='removeOrder'),
+
     #MAPS
     path('maps', login_required(views.Maps.as_view(), login_url='login')),
 

@@ -8,8 +8,8 @@ from django.contrib.auth import authenticate, login, logout as auth_logout, get_
 from django.contrib.auth.views import LoginView, PasswordResetView
 from django.db.models import Sum, Count, F
 from stockProject import settings
-from .models import Product, Brand, User, Store, Category, LogEntry
-from .forms import ProductForm, BrandForm, StoreForm, CategoryForm
+from .models import Product, Brand, User, Store, Category, LogEntry, Orders
+from .forms import ProductForm, BrandForm, StoreForm, CategoryForm, OrderForm
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import send_mail
@@ -276,6 +276,50 @@ class StoreRemove(PermissionRequiredMixin, DeleteView):
     model = Store
     template_name = 'store_delete.html'
     success_url = '/stores'
+
+
+# STORES
+class OrderListView(FormMixin, ListView):
+    model = Orders
+    template_name = 'order_detail.html'
+    form_class = OrderForm
+    initial = {'key': 'value'}
+    success_url = '/orders'
+
+    def get(self, request):
+        all_objects=Orders.objects.all()
+        form = self.form_class(initial=self.initial)
+        context= {
+            'object_list': all_objects,
+            'form': form
+        }
+
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(self.success_url)
+
+        return render(request, self.template_name, {'form': form})
+
+
+class OrderUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = 'is_staff'
+    model = Orders
+    template_name = 'order_edit.html'
+    fields= "__all__"
+    success_url = '/orders'
+
+
+class OrderRemove(PermissionRequiredMixin, DeleteView):
+    permission_required = 'is_staff'
+    model = Orders
+    template_name = 'order_delete.html'
+    success_url = '/orders'
+
 
 # LOGS
 class AuditLogs(ListView):
