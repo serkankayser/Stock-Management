@@ -97,26 +97,11 @@ class Products(CreateView, ListView):
     initial = {'key': 'value'}
     success_url = '/products'
 
-    # def get(self, request):
-    #     all_objects=Product.objects.all()
-    #     form = self.form_class(initial=self.initial)
-    #     for x in all_objects:
-    #         if x.is_discount:
-    #             x.price=x.discount
-    #     context= {
-    #         'object_list': all_objects,
-    #         'form': form
-    #     }
-
-    #     return render(request, self.template_name, context)
-
-    # def post(self, request):
-    #     form = self.form_class(request.POST)
-    #     if form.is_valid():
-    #         form.save()
-    #         return HttpResponseRedirect(self.success_url)
-
-        # return render(request, self.template_name, {'form': form})
+    def get_context_data(self, **kwargs):
+        # EXCLUDE PRODUCTS WITH QTY->0
+        context = super().get_context_data(**kwargs)
+        context['object_list'] = context.get('object_list').exclude(quantity=0)
+        return context
 
 
 class ProductUpdate(UpdateView):
@@ -288,6 +273,7 @@ class OrderListView(FormMixin, ListView):
 
     def get(self, request):
         all_objects=Orders.objects.all()
+        # all_objects = Orders.objects.exclude(quantity=0)
         form = self.form_class(initial=self.initial)
         context= {
             'object_list': all_objects,
@@ -300,9 +286,16 @@ class OrderListView(FormMixin, ListView):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            form.save()
+            form_qty = int(form.data.get('quantity'))
+            form_prod_id = form.data.get('product')
+            prod = Product.objects.filter(id=form_prod_id)
+            prod_qty = prod[0].quantity
+            if prod_qty >= form_qty:
+                remaining_qty = prod_qty - form_qty
+                Product.objects.filter(id=form_prod_id).update(quantity=remaining_qty)
+                
+                form.save()
             return HttpResponseRedirect(self.success_url)
-
         return render(request, self.template_name, {'form': form})
 
 

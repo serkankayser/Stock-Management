@@ -24,4 +24,4 @@ class StoreForm(ModelForm):
 class OrderForm(ModelForm):
     class Meta:
         model = Orders
-        fields = ['user','product','status','vat','discount','company','shipping','gross_amount','net_amount','info_order']
+        fields = ['user','product','quantity','status','vat','discount','company','shipping','info_order']

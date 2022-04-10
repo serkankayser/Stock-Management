@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <h4 class="header-title">All Orders</h4>
                     <a id='contact-view' data-toggle="modal" data-target="#contactModal">
-                        <button type="button" class="btn btn-rounded btn-success mb-3">Add Store</button>
+                        <button type="button" class="btn btn-rounded btn-success mb-3">Add Order</button>
                     </a>
 
                     <!-- ADD - The Modal START -->
@@ -44,31 +44,37 @@
                         <table id="dataTable" class="text-center">
                             <thead class="bg-light text-capitalize">
                                 <tr>
+                                    <th class='all'>Created</th>
+                                    <th class='all'>Updated</th>
                                     <th class='all'>User</th>
                                     <th class='all'>Product</th>
+                                    <th class='all'>Quantity</th>
                                     <th class='all'>Status</th>
-                                    <th class='all'>Vat</th>
-                                    <th class='all'>Discount</th>
+                                    <th class='none'>Vat</th>
                                     <th class='all'>Company</th>
-                                    <th class='all'>Shipping</th>
                                     <th class='all'>Gross Amount</th>
                                     <th class='all'>Net Amount</th>
-                                    <th class='all'>Info Order</th>
+                                    <th class='none'>Shipping</th>
+                                    <th class='none'>Discount</th>
+                                    <th class='none'>Info Order</th>
                                     <th class='all'>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for order in object_list %}
                                 <tr>
+                                    <td>{{ order.created_at }}</td>
+                                    <td>{{ order.updated_at }}</td>
                                     <td>{{ order.user }}</td>
                                     <td>{{ order.product }}</td>
+                                    <td>{{ order.quantity }}</td>
                                     <td>{{ order.status }}</td>
-                                    <td>{{ order.vat }}</td>
-                                    <td>{{ order.discount }}</td>
+                                    <td>{{ order.vat }} %</td>
                                     <td>{{ order.company }}</td>
-                                    <td>{{ order.shipping }}</td>
                                     <td>{{ order.gross_amount }}</td>
                                     <td>{{ order.net_amount }}</td>
+                                    <td>{{ order.shipping }}</td>
+                                    <td>{{ order.discount }}</td>
                                     <td>{{ order.info_order }}</td>
                                     <td>
                                         <a href="{% url 'editOrder' order.id %}">

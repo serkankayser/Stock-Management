@@ -74,6 +74,7 @@ class OrdersAdmin(admin.ModelAdmin):
     list_display = [
         'user'
         ,'product'
+        ,'quantity'
         ,'status'
         ,'vat'
         ,'discount'
@@ -88,6 +89,7 @@ class OrdersAdmin(admin.ModelAdmin):
     fields = (
         'user'
         ,'product'
+        ,'quantity'
         ,'status'
         ,'vat'
         ,'discount'
@@ -99,7 +101,7 @@ class OrdersAdmin(admin.ModelAdmin):
         ,'created_at'
         ,'updated_at'
     )
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at', 'gross_amount', 'net_amount')
     class Meta:
         model = Orders
 
